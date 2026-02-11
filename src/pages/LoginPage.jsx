@@ -1,8 +1,9 @@
 import { Form, Input, Button, Card, Typography, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useMutation } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { login } from '../api/auth';
+import { authUtils } from '../utils/auth';
 
 const { Title } = Typography;
 
@@ -14,7 +15,7 @@ const LoginPage = () => {
     onSuccess: (data) => {
       message.success('Login successfully!');
       console.log(data);
-      localStorage.setItem('accessToken', data.tokens.accessToken);
+      authUtils.saveTokens(data.tokens.accessToken, data.tokens.refreshToken);
       navigate('/');
     },
     onError: (error) => {
@@ -65,6 +66,10 @@ const LoginPage = () => {
               Login
             </Button>
           </Form.Item>
+
+          <div style={{ textAlign: 'center' }}>
+            Don't have an account? <Link to="/register">Register now</Link>
+          </div>
         </Form>
       </Card>
     </div>

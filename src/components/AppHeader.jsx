@@ -2,12 +2,13 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Layout, Button, Space, message } from 'antd';
 import { useMutation } from '@tanstack/react-query';
 import { logout } from '../api/auth';
+import { authUtils } from '../utils/auth';
 
 const { Header } = Layout;
 
 export const AppHeader = () => {
   const navigate = useNavigate();
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = authUtils.getAccessToken();
 
   const mutation = useMutation({
     mutationFn: logout,
@@ -22,7 +23,7 @@ export const AppHeader = () => {
   });
 
   const performLocalLogout = () => {
-    localStorage.removeItem('accessToken');
+    authUtils.clearTokens();
     navigate('/');
   };
 

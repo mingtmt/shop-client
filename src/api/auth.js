@@ -13,3 +13,8 @@ export const login = async (credentials) => {
 export const logout = async () => {
   await axiosInstance.post('/v1/auth/logout');
 };
+
+export const getProfile = async () => {
+  const { data } = await axiosInstance.get('/v1/auth/me');
+  return data.data;
+};

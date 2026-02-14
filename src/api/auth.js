@@ -18,3 +18,8 @@ export const getProfile = async () => {
   const { data } = await axiosInstance.get('/v1/auth/me');
   return data.data;
 };
+
+export const updateProfile = async (updateData) => {
+  const { data } = await axiosInstance.patch(`v1/users`, updateData);
+  return data.data;
+};

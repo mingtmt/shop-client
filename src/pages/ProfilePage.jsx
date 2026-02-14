@@ -1,22 +1,48 @@
-import { useQuery } from '@tanstack/react-query';
-import { Card, Descriptions, Avatar, Typography, Spin, Alert, Tag, Divider } from 'antd';
-import { UserOutlined, MailOutlined, CalendarOutlined, SafetyCertificateOutlined } from '@ant-design/icons';
-import { getProfile } from '../api/auth';
+import { useState, useEffect } from 'react';
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
+import { Card, Descriptions, Avatar, Typography, Spin, Alert, Tag, Divider, Modal, Form, message, Button, Input } from 'antd';
+import { UserOutlined, MailOutlined, CalendarOutlined, SafetyCertificateOutlined, EditOutlined } from '@ant-design/icons';
+import { getProfile, updateProfile } from '../api/auth';
 
 const { Title } = Typography;
 
 const ProfilePage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [form] = Form.useForm();
+  const queryClient = useQueryClient();
+
   const { data: user, isLoading, error } = useQuery({
     queryKey: ['profile'],
     queryFn: getProfile,
   });
 
+  const updateMutation = useMutation({
+    mutationFn: updateProfile,
+    onSuccess: () => {
+      message.success('Update successfully!');
+      setIsModalOpen(false);
+      queryClient.invalidateQueries(['profile']);
+    },
+    onError: (error) => {
+      message.error(error.response?.data?.message || 'Update failed, please try again.');
+    }
+  });
+
+  useEffect(() => {
+    if (user && isModalOpen) {
+      form.setFieldsValue({
+        name: user.name,
+        email: user.email,
+      });
+    }
+  }, [user, isModalOpen, form]);
+
   if (isLoading) return <div style={{ textAlign: 'center', padding: '50px' }}><Spin size="large" /></div>;
   
   if (error) return (
     <Alert 
-      message="Lỗi" 
-      description="Không thể tải thông tin hồ sơ. Vui lòng thử lại sau." 
+      title="Error" 
+      description="Cannot fetch your profile. Please try again later." 
       type="error" 
       showIcon 
     />
@@ -24,7 +50,10 @@ const ProfilePage = () => {
 
   return (
     <div style={{ maxWidth: 800, margin: '0 auto', padding: '20px' }}>
-      <Card variant="outlined" className="profile-card" style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+      <Card 
+        variant="outlined" className="profile-card" style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}
+        extra={<Button type="primary" icon={<EditOutlined />} onClick={() => setIsModalOpen(true)}>Edit</Button>}
+      >
         <div style={{ textAlign: 'center', marginBottom: 24 }}>
           <Avatar size={100} icon={<UserOutlined />} src={user.avatarUrl} />
           <Title level={2} style={{ marginTop: 16 }}>{user.name}</Title>
@@ -49,6 +78,36 @@ const ProfilePage = () => {
           * This information is not editable.
         </div>
       </Card>
+
+      <Modal
+        title="Edit your profile"
+        open={isModalOpen}
+        onCancel={() => setIsModalOpen(false)}
+        onOk={() => form.submit()}
+        confirmLoading={updateMutation.isPending}
+        okText="Save"
+        cancelText="Cancel"
+      >
+        <Form form={form} layout="vertical" onFinish={(values) => updateMutation.mutate(values)}>
+          <Form.Item
+            name="name"
+            label="Full name"
+            rules={[{ required: true, message: 'Please input your full name!' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="email"
+            label="Email"
+            rules={[
+              { required: true, message: 'Please input your email!' },
+              { type: 'email', message: 'Email is not valid!' }
+            ]}
+          >
+            <Input />
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };

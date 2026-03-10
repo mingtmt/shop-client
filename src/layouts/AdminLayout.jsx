@@ -11,9 +11,9 @@ const AdminLayout = () => {
 
   const menuItems = [
     { key: '/admin', icon: <DashboardOutlined />, label: 'Dashboard' },
-    { key: '/admin/products', icon: <ShoppingOutlined />, label: 'Quản lý sản phẩm' },
-    { key: '/admin/users', icon: <UserOutlined />, label: 'Quản lý người dùng' },
-    { key: '/', icon: <ArrowLeftOutlined />, label: 'Về trang Web Client' },
+    { key: '/admin/users', icon: <UserOutlined />, label: 'Users Management' },
+    { key: '/admin/products', icon: <ShoppingOutlined />, label: 'Products Management' },
+    { key: '/', icon: <ArrowLeftOutlined />, label: 'Back to Home' },
   ];
 
   return (

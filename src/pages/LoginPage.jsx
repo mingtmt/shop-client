@@ -1,14 +1,19 @@
 import { Form, Input, Button, Card, Typography, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useMutation } from '@tanstack/react-query';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { login } from '../api/auth';
 import { authUtils } from '../utils/auth';
 
 const { Title } = Typography;
 
 const LoginPage = () => {
+  const location = useLocation();
   const navigate = useNavigate();
+
+  const from = location.state?.from?.pathname || "/";
+
+  console.log(from);
   
   const mutation = useMutation({
     mutationFn: login,
@@ -16,7 +21,8 @@ const LoginPage = () => {
       message.success('Login successfully!');
       console.log(data);
       authUtils.saveTokens(data.tokens.accessToken, data.tokens.refreshToken);
-      navigate('/');
+      navigate(from, { replace: true });
+      window.location.reload();
     },
     onError: (error) => {
       message.error('Login failed!', error.message);

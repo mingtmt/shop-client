@@ -1,40 +1,45 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Layout } from 'antd';
-import { AppHeader } from './components/AppHeader';
-import ProtectedRoute from './components/ProtectedRoute';
-import HomePage from './pages/HomePage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import ProfilePage from './pages/ProfilePage';
-
-const { Content, Footer } = Layout;
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute";
+import AdminRoute from "./components/AdminRoute";
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import ProfilePage from "./pages/ProfilePage";
+import AdminLayout from "./layouts/AdminLayout";
+import ClientLayout from "./layouts/ClientLayout";
 
 function App() {
   return (
     <Router>
-      <Layout style={{ minHeight: '100vh' }}>
-        <AppHeader />
-        
-        <Content style={{ padding: '24px', background: '#fff' }}>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route 
-              path="/profile" 
-              element={
-                <ProtectedRoute>
-                  <ProfilePage />
-                </ProtectedRoute>
-                } 
-              />
-            </Routes>
-        </Content>
+      <Routes>
+        {/* Client route */}
+        <Route path="/" element={<ClientLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path="login" element={<LoginPage />} />
+          <Route path="register" element={<RegisterPage />} />
+          <Route
+            path="profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
 
-        <Footer style={{ textAlign: 'center' }}>
-          mingtmt's Shop Client ©2026
-        </Footer>
-      </Layout>
+        {/* Admin route */}
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminLayout />
+            </AdminRoute>
+          }
+        >
+          <Route index element={<div>Admin Dashboard</div>} />
+          <Route path="products" element={<div>Quản lý sản phẩm</div>} />
+        </Route>
+      </Routes>
     </Router>
   );
 }

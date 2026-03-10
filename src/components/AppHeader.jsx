@@ -7,7 +7,7 @@ import { authUtils } from '../utils/auth';
 
 const { Header } = Layout;
 
-export const AppHeader = () => {
+const AppHeader = () => {
   const navigate = useNavigate();
   const accessToken = authUtils.getAccessToken();
 
@@ -80,3 +80,5 @@ export const AppHeader = () => {
     </Header>
   );
 };
+
+export default AppHeader;

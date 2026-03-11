@@ -120,7 +120,7 @@ const UserManagement = () => {
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 20 }}>
-        <Title level={3}>Users Management</Title>
+        <Title level={3}>User Management</Title>
         <Button type="primary" icon={<UserOutlined />}>Add new user</Button>
       </div>
 

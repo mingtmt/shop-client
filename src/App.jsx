@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProfilePage from "./pages/ProfilePage";
 import UserManagement from "./pages/admin/UserManagement";
+import ProductManagement from "./pages/admin/ProductManagement";
 
 import AdminLayout from "./layouts/AdminLayout";
 import ClientLayout from "./layouts/ClientLayout";
@@ -40,7 +41,7 @@ function App() {
         >
           <Route index element={<div>Admin Dashboard</div>} />
           <Route path="users" element={<UserManagement />} />
-          <Route path="products" element={<div>Quản lý sản phẩm</div>} />
+          <Route path="products" element={<ProductManagement />} />
         </Route>
       </Routes>
     </Router>

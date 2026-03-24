@@ -20,6 +20,16 @@ export const updateProduct = async (id, formData) => {
   return data.data;
 };
 
+export const publishProduct = async (id) => {
+  const { data } = await axiosInstance.patch(`/v1/admin/products/${id}/publish`);
+  return data.data;
+};
+
+export const unpublishProduct = async (id) => {
+  const { data } = await axiosInstance.patch(`/v1/admin/products/${id}/unpublish`);
+  return data.data;
+};
+
 export const deleteProduct = async (id) => {
   const { data } = await axiosInstance.delete(`/v1/admin/products/${id}`);
   return data.data;

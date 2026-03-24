@@ -6,8 +6,17 @@ export const getAllProductsForAdmin = async () => {
   return data.data;
 };
 
-export const createProduct = async (productData) => {
-  const { data } = await axiosInstance.post('/v1/admin/products', productData);
+export const createProduct = async (formData) => {
+  const { data } = await axiosInstance.post('/v1/admin/products', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  });
+  return data.data;
+};
+
+export const updateProduct = async (id, formData) => {
+  const { data } = await axiosInstance.patch(`/v1/admin/products/${id}`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  });
   return data.data;
 };
 

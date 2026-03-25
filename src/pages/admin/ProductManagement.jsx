@@ -11,7 +11,7 @@ const ProductManagement = () => {
   const queryClient = useQueryClient();
   
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState(null);
+  const [editingProductId, setEditingProductId] = useState(null);
 
   const { data: products, isLoading } = useQuery({
     queryKey: ['admin-products'],
@@ -46,12 +46,12 @@ const ProductManagement = () => {
   });
 
   const handleOpenCreate = () => {
-    setEditingProduct(null); 
+    setEditingProductId(null); 
     setIsModalOpen(true);
   };
 
-  const handleOpenEdit = (record) => {
-    setEditingProduct(record);
+  const handleOpenEdit = (id) => {
+    setEditingProductId(id);
     setIsModalOpen(true);
   };
 
@@ -128,7 +128,7 @@ const ProductManagement = () => {
               </Button>
             </Popconfirm>
           )}
-          <Button icon={<EditOutlined />} onClick={() => handleOpenEdit(record)}>Edit</Button>
+          <Button icon={<EditOutlined />} onClick={() => handleOpenEdit(record._id)}>Edit</Button>
           <Popconfirm 
             title="Are you sure to delete this product?" 
             onConfirm={() => deleteMutation.mutate(record._id)}
@@ -157,7 +157,7 @@ const ProductManagement = () => {
       <ProductModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
-        editingProduct={editingProduct} 
+        editingProductId={editingProductId} 
       />
     </div>
   );

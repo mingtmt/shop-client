@@ -6,6 +6,11 @@ export const getAllProductsForAdmin = async () => {
   return data.data;
 };
 
+export const getProductDetails = async (id) => {
+  const { data } = await axiosInstance.get(`/v1/admin/products/${id}`);
+  return data.data;
+}
+
 export const createProduct = async (formData) => {
   const { data } = await axiosInstance.post('/v1/admin/products', formData, {
     headers: { 'Content-Type': 'multipart/form-data' }
